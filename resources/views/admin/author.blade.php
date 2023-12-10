@@ -13,7 +13,7 @@
     <div class="col-12">
     <div class="card">
     <div class="card-header">
-    <a href="#" @click="addData()" class="btn btn-sm btn-primary pull-left">Create New author</a>
+    <a href="{{url('authors/create')}}" @click="addData()" class="btn btn-sm btn-primary pull-left">Create New author</a>
 
     <div class="card-tools">
     <div class="input-group input-group-sm" style="width: 150px;">
