@@ -26,12 +26,13 @@ class AuthorController extends Controller
      */
     public function create()
     {
-       return view('admin.author.create');
+      //  return view('admin.author.create');
     }
 
     /**
      * Store a newly created resource in storage.
-     * 
+     * @param
+     * @return
      * 
      */
     public function store(Request $request)
@@ -42,9 +43,12 @@ class AuthorController extends Controller
         'email' => ['required'],
         'address' =>['required'],
       ]);
+      Author::create($request->all());
+
+      return redirect('authors');
      Author::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number , 'address'=>$request->address]);
 
-    //   return redirect('authors');
+      return redirect('authors');
     }
 
     /**
@@ -68,7 +72,15 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
-        //
+         $this->validate($request,[
+        'name' => ['required'],
+        'phone_number' =>['required'],
+        'email' => ['required'],
+        'address' =>['required'],
+      ]);
+      $author->update($request->all());
+
+      return redirect('authors');
     }
 
     /**
@@ -76,6 +88,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+       $author->delete(); 
+        return redirect('authors');
     }
 }

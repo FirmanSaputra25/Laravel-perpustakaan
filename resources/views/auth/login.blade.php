@@ -5,7 +5,7 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <h1  class="h1"><b>Danaya</b>Library</h1>
+      <h1  class="h1"><b>Lastri</b>Library</h1>
     </div>
     <div class="card-body">
       <p class="login-box-msg"></p>
