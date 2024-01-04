@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
+
+      public function __construct(){
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -24,7 +28,7 @@ class PublisherController extends Controller
     
     public function create()
     {
-        return view ('admin.publisher.create');
+        // return view ('admin.publisher.create');
         
     }
 
@@ -36,12 +40,16 @@ class PublisherController extends Controller
 
         $this->validate($request ,[
             'name'=>['required'],
+            'phone_number' =>['required'],
+            'email' => ['required' , 'email'],
         ]);
-        // dd($request->all());
-         Publisher::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number , 'address'=>$request->address]);
+
         // Publisher::create($request->all());
-        
-     return redirect('publishers');
+
+        return redirect('publishers');
+        // dd($request->all());
+         Publisher::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number]);
+        // Publisher::create($request->all());
     }
     /**
      * Display the specified resource.

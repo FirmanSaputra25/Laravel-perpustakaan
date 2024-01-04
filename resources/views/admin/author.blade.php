@@ -60,15 +60,11 @@
                                             <td class="text-center">{{ $author->phone_number }}</td>
                                             <td class="text-center">{{ $author->address }}</td>
                                             <td class="text-center d-flex align-items-center justify-content-center">
-                                                <a href="#" v-on:click="editData({{ $author }})"
+                                                <a href="#" @click="editData({{ $author }})"
                                                     class="btn btn-warning btn-sm mr-1">Edit</a>
 
-                                                <form action="{{ url('author', ['id' => $author->id]) }}" method="POST">
-                                                    @method('deleteData')
-                                                    <input class="btn btn-danger btn-sm my-2 " type="submit" value="Delete"
-                                                        onclick="return confirm ('Apakah anda ingin menghapus data ini?')">
-                                                    @csrf
-                                                </form>
+                                               <a href="#" @click="deleteData({{ $author -> id }})"
+                                                    class="btn btn-danger btn-sm"> Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -83,7 +79,7 @@
     <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="{{ url('authors') }}" autocomplete="off">
+                <form method="post" :action="actionUrl" autocomplete="off">
                     <div class="modal-header">
                         <h4 class="modal-title">Author</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -91,28 +87,28 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        
+                        @csrf
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" name="name" value="" required>
+                            <input type="text" class="form-control" name="name" :value="data.name" required>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="text" class="form-control" name="email" value="" required>
+                            <input type="text" class="form-control" name="email" :value="data.email" required>
                         </div>
                         <div class="form-group">
                             <label>Phone Number</label>
-                            <input type="text" class="form-control" name="phone_number" value="" required>
+                            <input type="text" class="form-control" name="phone_number" :value="data.phone_number" required>
                         </div>
                         <div class="form-group">
                             <label>Address</label>
-                            <input type="text" class="form-control" name="address" value="" required>
+                            <input type="text" class="form-control" name="address" :value="data.address" required>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                        @csrf
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        
                     </div>
                 </form>
             </div>
@@ -137,11 +133,17 @@
                     $('#modal-default').modal();
                 },
                 editData(data) {
+                    
                     this.data = data;
                     $('#modal-default').modal();
                 },
-                deleteData() {
-                    // Implement your delete logic here
+                deleteData(id) {
+                     this.actionUrl = '{{url('authors')}}'+'/'+id;
+                   if(confirm("apakah ingin hapus data ?")){
+                    axios.post(this.actionUrl,{_method: 'DELETE'}).then(response =>{
+                        location.reload();
+                    });
+                   }
                 }
             }
         });

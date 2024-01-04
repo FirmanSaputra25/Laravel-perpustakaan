@@ -40,15 +40,15 @@ class AuthorController extends Controller
       $this->validate($request,[
         'name' => ['required'],
         'phone_number' =>['required'],
-        'email' => ['required'],
+        'email' => ['required' , 'email'],
         'address' =>['required'],
       ]);
       Author::create($request->all());
 
       return redirect('authors');
-     Author::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number , 'address'=>$request->address]);
+    //  Author::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number , 'address'=>$request->address]);
 
-      return redirect('authors');
+    //   return redirect('authors');
     }
 
     /**
