@@ -14,7 +14,7 @@
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset ('asset/dist/css/adminlte.min.css')}}">
+  <link rel="stylesheet" href="{{asset('asset/dist/css/adminlte.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{asset ('asset/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
   @yield('css')
@@ -169,7 +169,7 @@
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       <img src="{{asset ('asset/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Denaya Library</span>
+      <span class="brand-text font-weight-light">Lastri Library</span>
     </a>
 
     <!-- Sidebar -->
