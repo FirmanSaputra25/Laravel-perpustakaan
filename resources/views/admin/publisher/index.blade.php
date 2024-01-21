@@ -26,7 +26,7 @@
                                         <th class="text-center">Name</th>
                                         <th class="text-center">Email</th>
                                         <th class="text-center">No Telpon</th>
-                                       
+                                        <th class="text-center">Address</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -37,6 +37,7 @@
                                             <td class="text-center">{{ $publisher->name }}</td>
                                             <td class="text-center">{{ $publisher->email }}</td>
                                             <td class="text-center">{{ $publisher->phone_number }}</td>
+                                            <td class="text-center">{{ $publisher->address }}</td>
                                             
                                             <td class="text-center d-flex align-items-center justify-content-center">
                                                 <a href="#" @click="editData({{ $publisher }})"
@@ -77,6 +78,10 @@
                                 <div class="form-group">
                                     <label>Phone Number</label>
                                     <input type="text" class="form-control" name="phone_number" :value="data.phone_number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <input type="text" class="form-control" name="phone_number" :value="data.address" required>
                                 </div>
                               
                             </div>
@@ -129,7 +134,7 @@
             data() {
                 return {
                     data: {},
-                    actionUrl: '{{ url('publisher') }}'
+                    actionUrl: '{{ url('publishers') }}'
                 };
             },
             mounted:function() {

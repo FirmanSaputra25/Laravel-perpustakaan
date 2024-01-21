@@ -40,14 +40,15 @@ class PublisherController extends Controller
 
         $this->validate($request ,[
             'name'=>['required'],
+            'email'=>['required' , 'email'],
             'phone_number' =>['required'],
-            'email' => ['required' , 'email'],
+            'address' => ['required'],
         ]);
 
         // Publisher::create($request->all());
-        Publisher::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number]);
-        // Publisher::create ($request->all());
+        Publisher::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number , 'address'=>$request->address]);
         return redirect('publishers');
+        // Publisher::create ($request->all());
         // dd($request->all());
         // Publisher::create($request->all());
     }
@@ -76,6 +77,7 @@ class PublisherController extends Controller
             'name'=>['required'],
             'email' => ['required', 'email'],
             'phone_number' =>['required'],
+            'address' =>['required'],
         ]);
     
         $publisher->update ($request->all());

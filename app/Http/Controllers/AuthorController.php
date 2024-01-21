@@ -16,7 +16,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
-      
+      $authors = Author::all();
 
        return view ('admin.author');
     }
@@ -70,9 +70,11 @@ class AuthorController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Author $author)
-    {
-        //
+    
+        { 
+        return view('admin.author.edit' , compact('author'));
     }
+    
 
     /**
      * Update the specified resource in storage.

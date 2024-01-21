@@ -5,8 +5,8 @@
 
 @section('css')
    <!--Data table -->
-    <link rel="stylesheet" href="{{asset('asset/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{asset('asset/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+   <link rel="stylesheet" href="{{asset('asset/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+   <link rel="stylesheet" href="{{asset('asset/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('asset/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">  
 @endsection
 @section('content')
@@ -93,7 +93,7 @@
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
-{{-- <script type="text/javascript">
+<script type="text/javascript"> 
     var actionUrl = '{{url ('authors')}}';
     var apiUrl = '{{url ('api/authors')}}';
     
@@ -121,6 +121,7 @@
             data: {},
             actionUrl,
             apiUrl,
+            editData: false,
         },
         mounted:function(){
             this.datatable(); 
@@ -128,7 +129,7 @@
             methods: {
                 datatable(){
                 const _this = this;
-                _this.table = $('datatable').DataTable({
+                _this.table = $('#datatable').DataTable({
                     ajax: {
                         url: _this.apiUrl,
                         type: 'GET',
@@ -140,9 +141,12 @@
             },
         }
     });
-</script> --}}
+     controller.mount('#controller');
+     
+</script>
+@endsection
 
- <script type="text/javascript">
+ {{-- <script type="text/javascript">
      $(function () {
     $("#datatable").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
@@ -199,4 +203,4 @@
     </script>
 
 
-@endsection
+@endsection --}}
