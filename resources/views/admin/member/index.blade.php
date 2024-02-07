@@ -10,6 +10,16 @@
 @endsection
 @section('content')
     <div id="controller">
+        <div id="controller">
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -63,7 +73,7 @@
                     <div class="modal-content">
                         <form method="POST" :action="actionUrl" autocomplete="off">
                             <div class="modal-header">
-                                <h4 class="modal-title">member</h4>
+                                <h4 class="modal-title">Member</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -77,7 +87,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Gender</label>
-                                    <input type="text" class="form-control" name="email" :value="data.gender" required>
+                                    <input type="text" class="form-control" name="gender" :value="data.gender" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Phone Number</label>
@@ -85,13 +95,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Address</label>
-                                    <input type="text" class="form-control" name="email" :value="data.address" required>
+                                    <input type="text" class="form-control" name="address" :value="data.address" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Email</label>
                                     <input type="text" class="form-control" name="email" :value="data.email" required>
                                 </div>
-                              
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

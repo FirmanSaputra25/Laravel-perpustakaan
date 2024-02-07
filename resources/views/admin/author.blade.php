@@ -11,6 +11,15 @@
 @endsection
 @section('content')
     <div id="controller">
+         @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -40,7 +49,7 @@
             <div class="modal fade" id="modal-default">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form method="post" :action="actionUrl" autocomplete="off">
+                        <form method="post" :action="actionUrl" autocomplete="off" @submit="submitForm($event,data.id)"> 
                             <div class="modal-header">
                                 <h4 class="modal-title">Author</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -107,66 +116,19 @@
             return `
             <a href="#" class="btn btn-warning btn-sm" onclick="controller.editData(event, ${meta.row})"
             >Edit</a>
-            <a class="btn btn-danger btn-sm" onclick="controller.deleteData(event, ${data.id})"
+            <a  class="btn btn-danger btn-sm" onclick="controller.deleteData(event, ${data.id})"
             >Delete</a>`;
 
-        }, orderable: false, width: '200px', class: 'text-center'},
+            
+        }, orederable:false, class: 'text-center'},
         
     ];
-
-    var controller = new Vue({
-        el: '#controller',
-        data: {
-            datas:[],
-            data: {},
-            actionUrl,
-            apiUrl,
-            editData: false,
-        },
-        mounted:function(){
-            this.datatable(); 
-        },
-            methods: {
-                datatable(){
-                const _this = this;
-                _this.table = $('#datatable').DataTable({
-                    ajax: {
-                        url: _this.apiUrl,
-                        type: 'GET',
-                    },
-                    columns: columns
-                }).on('xhr', function(){
-                    _this.datas = _this.table.ajax.json().data;
-                });
-            },
-        }
-    });
-     controller.mount('#controller');
-     
 </script>
+{{-- <script src="{{asset('js/data.js')}}" >
+
+</script> --}}
 @endsection
-
- {{-- <script type="text/javascript">
-     $(function () {
-    $("#datatable").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    // $('#datatable').DataTable({
-    //   "paging": true,
-    //   "lengthChange": false,
-    //   "searching": false,
-    //   "ordering": true,
-    //   "info": true,
-    //   "autoWidth": false,
-    //   "responsive": true,
-    // });
-  });
-</script>
- 
-
-<!-- CRUD-->
-    <script type="text/javascript">
+{{-- <script type="text/javascript">
         var controller = Vue.createApp({
             data() {
                 return {
@@ -175,7 +137,7 @@
                 };
             },
             mounted:function() {
-                
+                this.datatable();
             },
             methods: {
                 addData() {  
@@ -200,7 +162,26 @@
 
         // Attach the Vue instance to the element with the ID 'controller'
         controller.mount('#controller');
-    </script>
+    </script> --}}
 
 
-@endsection --}}
+ {{-- <script type="text/javascript">
+     $(function () {
+    $("#datatable").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    // $('#datatable').DataTable({
+    //   "paging": true,
+    //   "lengthChange": false,
+    //   "searching": false,
+    //   "ordering": true,
+    //   "info": true,
+    //   "autoWidth": false,
+    //   "responsive": true,
+    // });
+  });
+</script>
+ 
+
+    

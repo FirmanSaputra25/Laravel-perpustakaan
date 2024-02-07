@@ -37,15 +37,12 @@ class PublisherController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request ,[
             'name'=>['required'],
             'email'=>['required' , 'email'],
-            'phone_number' =>['required'],
+            'phone_number' =>['required' ,'int'],
             'address' => ['required'],
         ]);
-
-        // Publisher::create($request->all());
         Publisher::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number , 'address'=>$request->address]);
         return redirect('publishers');
         // Publisher::create ($request->all());

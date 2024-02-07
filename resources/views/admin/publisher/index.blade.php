@@ -10,8 +10,17 @@
 @endsection
 @section('content')
     <div id="controller">
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
         <div class="row">
-            <div class="col-12">
+            <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         {{-- <a href="{{ url('publishers/create') }}" @click="addData()" --}}
@@ -30,7 +39,7 @@
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                {{-- <tbody>
                                     @foreach ($publishers as $key => $publisher)
                                         <tr>
                                             <td class="text-center">{{ $key + 1 }}</td>
@@ -49,7 +58,7 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table>
+                            </table> --}}
                         </div>
                     </div>
                 </div>
@@ -81,7 +90,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Address</label>
-                                    <input type="text" class="form-control" name="phone_number" :value="data.address" required>
+                                    <input type="text" class="form-control" name="address" :value="data.address" required>
                                 </div>
                               
                             </div>
@@ -112,22 +121,31 @@
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 <script type="text/javascript">
-     $(function () {
-    $("#datatable").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    // $('#datatable').DataTable({
-    //   "paging": true,
-    //   "lengthChange": false,
-    //   "searching": false,
-    //   "ordering": true,
-    //   "info": true,
-    //   "autoWidth": false,
-    //   "responsive": true,
-    // });
-  });
+     var actionUrl = '{{url ('publishers')}}';
+    var apiUrl = '{{url ('api/publishers')}}';
+    
+    var columns = [
+        {data: 'DT_RowIndex' ,class: 'text-center' , orderable:true},
+        {data: 'name' ,class: 'text-center' , orderable:true},
+        {data: 'email' ,class: 'text-center' , orderable:true},
+        {data: 'phone_number' ,class: 'text-center' , orderable:true},
+        {data: 'address' ,class: 'text-center' , orderable:true},
+        {render:function (index,row,data,meta){
+            return `
+            <a href="#" class="btn btn-warning btn-sm" onclick="controller.editData(event, ${meta.row})"
+            >Edit</a>
+            <a  class="btn btn-danger btn-sm" onclick="controller.deleteData(event, ${data.id})"
+            >Delete</a>`;
+
+            
+        }, orederable:false, class: 'text-center'},
+        
+    ];
 </script>
+<script src="{{asset('js/data.js')}}">
+    
+</script>
+
 {{-- CRUD --}}
     <script type="text/javascript">
         var controller = Vue.createApp({
@@ -164,6 +182,6 @@
         // Attach the Vue instance to the element with the ID 'controller'
         controller.mount('#controller');
     </script>
-
-
 @endsection
+
+

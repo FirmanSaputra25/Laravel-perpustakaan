@@ -38,19 +38,18 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-
-        $this->validate($request ,[
+        $this->validate($request , [
             'name'=>['required'],
             'gender'=>['required'],
-            'phone_number' =>['required'],
+            'phone_number' =>['required' , 'int'],
             'address' =>['required'],
             'email' => ['required' , 'email'],
         ]);
 
-        Member::create($request->all());
-        // Member::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number]);
-        // member::create ($request->all());
+        // Member::create($request->all());
+        Member::create(['name'=>$request->name,'gender'=>$request->gender, 'phone_number'=>$request->phone_number , 'address'=>$request->address , 'email'=>$request->email]);
         return redirect('members');
+        // member::create ($request->all());
         // dd($request->all());
         // member::create($request->all());
     }
@@ -78,13 +77,13 @@ class MemberController extends Controller
          $this->validate($request ,[
             'name'=>['required'],
             'gender'=>['required'],
-            'phone_number' =>['required'],
-            'address'=>['required'],
-            'email' => ['required', 'email'],
+            'phone_number' =>['required' ,'int'],
+            'address' => ['required'],
+            'email'=>['required' , 'email'],
         ]);
-    
-        $member->update ($request->all());
-         return redirect('members');
+         $member->update ($request->all());
+       
+        return redirect('members');
         
     }
 
