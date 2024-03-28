@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+
 use Illuminate\Http\Request;
 
 
@@ -18,10 +19,17 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = Member::all();
-        //   $members = Member::with ('users')->get();
-        return view('admin.member.index',compact('members'));
+          $members = Member::with ('user')->get();
+        return view('admin.member.index', compact('members'));
     }
+    public function api()
+    {
+      $members = Member::all();
+      $datatables = datatables()->of($members)->addIndexColumn();
+
+      return $datatables->make(true);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -29,7 +37,7 @@ class MemberController extends Controller
     
     public function create()
     {
-        // return view ('admin.member.create');
+        // return view ('admin.publisher.create');
         
     }
 
@@ -38,25 +46,23 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request , [
+        $this->validate($request ,[
             'name'=>['required'],
             'gender'=>['required'],
-            'phone_number' =>['required' , 'int'],
-            'address' =>['required'],
-            'email' => ['required' , 'email'],
+            'phone_number' =>['required' ,'int'],
+            'address' => ['required'],
+            'email'=>['required' , 'email'],
         ]);
-
-        // Member::create($request->all());
-        Member::create(['name'=>$request->name,'gender'=>$request->gender, 'phone_number'=>$request->phone_number , 'address'=>$request->address , 'email'=>$request->email]);
+        Member::create(['name'=>$request->name,'gender'=>$request->gender, 'phone_number'=>$request->phone_number , 'address'=>$request->address,'email'=>$request->email]);
         return redirect('members');
-        // member::create ($request->all());
+        // Member::create ($request->all());
         // dd($request->all());
-        // member::create($request->all());
+        // Member::create($request->all());
     }
     /**
      * Display the specified resource.
      */
-    public function show(member $member)
+    public function show(Member $member)
     {
         //
     }
@@ -76,14 +82,14 @@ class MemberController extends Controller
     {
          $this->validate($request ,[
             'name'=>['required'],
-            'gender'=>['required'],
-            'phone_number' =>['required' ,'int'],
-            'address' => ['required'],
-            'email'=>['required' , 'email'],
+            'gender'=>['required' , 'in:L,P'],
+            'phone_number' =>['required'],
+            'address' =>['required'],
+            'email' => ['required', 'email'],
         ]);
-         $member->update ($request->all());
-       
-        return redirect('members');
+    
+        $member->update ($request->all());
+         return redirect('members');
         
     }
 

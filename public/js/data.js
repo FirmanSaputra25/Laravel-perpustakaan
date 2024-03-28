@@ -3,8 +3,9 @@ var controller = Vue.createApp({
         return {
             datas: [],
             data: {},
-            actionUrl,
-            apiUrl,
+            actionUrl, // Perhatikan bahwa Anda perlu menetapkan nilai ini
+            apiUrl, // Perhatikan bahwa Anda perlu menetapkan nilai ini
+            table: null, // Tambahkan properti tabel untuk menyimpan objek DataTable
         };
     },
     mounted: function () {
@@ -13,10 +14,10 @@ var controller = Vue.createApp({
     methods: {
         datatable() {
             const _this = this;
-            _this.table = $("#datatable")
+            this.table = $("#datatable")
                 .DataTable({
                     ajax: {
-                        url: _this.apiUrl,
+                        url: this.apiUrl,
                         type: "GET",
                     },
                     columns,
@@ -27,38 +28,40 @@ var controller = Vue.createApp({
         },
         addData() {
             this.data = {};
-
             $("#modal-default").modal();
         },
-        editData(event, row) {
+        editData(row) {
             this.data = this.datas[row];
-            this.data = data;
-
             $("#modal-default").modal();
         },
-        deleteData(event, id) {
-            // this.actionUrl = '{{url('authors')}}'
-            if (confirm("apakah ingin hapus data ?")) {
+        deleteData(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                const deleteUrl = this.apiUrl + "/" + id; // Tentukan URL penghapusan yang benar
                 axios
-                    .post(this.actionUrl, { _method: "DELETE" })
-                    .then((response) => {
-                        location.reload();
+                    .delete(deleteUrl)
+                    .then(() => {
+                        this.table.ajax.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting data:", error);
                     });
             }
         },
         submitForm(event, id) {
             event.preventDefault();
-            const _this = this;
-            var actionUrl = !this.editStatus
-                ? this.actionUrl
-                : this.actionUrl + "/" + id;
+            const formData = new FormData(event.target);
+            const submitUrl = id ? this.apiUrl + "/" + id : this.actionUrl;
             axios
-                .post(actionUrl, new FormData($(event.target)[0]))
-                .then((response) => {
+                .post(submitUrl, formData)
+                .then(() => {
                     $("#modal-default").modal("hide");
-                    _this.table.ajax.reload();
+                    this.table.ajax.reload();
+                })
+                .catch((error) => {
+                    console.error("Error submitting form:", error);
                 });
         },
     },
 });
+
 controller.mount("#controller");
