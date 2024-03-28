@@ -18,7 +18,7 @@ class AuthorController extends Controller
     {
       $authors = Author::all();
 
-       return view ('admin.author');
+       return view('admin.author',compact('authors'));
     }
     public function api()
     {

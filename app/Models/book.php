@@ -12,4 +12,12 @@ class book extends Model
 {
     return $this->belongsTo('App\Models\Author', 'author_id');
 }
+public function publisher()
+{
+    return $this->belongsTo('App\Models\Publisher', 'publisher_id');
+}
+public function catalog()
+{
+    return $this->belongsTo('App\Models\Catalog', 'catalog_id');
+}
 }

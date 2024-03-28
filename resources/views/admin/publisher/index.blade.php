@@ -10,6 +10,7 @@
 @endsection
 @section('content')
     <div id="controller">
+        <div id="controller">
         @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -19,11 +20,12 @@
         </ul>
     </div>
 @endif
+
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        {{-- <a href="{{ url('publishers/create') }}" @click="addData()" --}}
+                        {{-- <a href="{{ url('members/create') }}" @click="addData()" --}}
                         <a href="javascript:void(0)" @click="addData()" class="btn btn-sm btn-primary pull-left">Create New
                             Publisher</a>
                     </div>
@@ -33,32 +35,33 @@
                                     <tr>
                                         <th width= "20spx">No</th>
                                         <th class="text-center">Name</th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">No Telpon</th>
+                                        <th class="text-center">E-mail</th>
+                                        <th class="text-center">Phone Number</th>
                                         <th class="text-center">Address</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
-                                {{-- <tbody>
-                                    @foreach ($publishers as $key => $publisher)
+                                <tbody>
+                                    
+                                    @foreach ($publishers as $key => $data)
                                         <tr>
                                             <td class="text-center">{{ $key + 1 }}</td>
-                                            <td class="text-center">{{ $publisher->name }}</td>
-                                            <td class="text-center">{{ $publisher->email }}</td>
-                                            <td class="text-center">{{ $publisher->phone_number }}</td>
-                                            <td class="text-center">{{ $publisher->address }}</td>
+                                            <td class="text-center">{{ $data->name }}</td>
+                                            <td class="text-center">{{ $data->email }}</td>
+                                            <td class="text-center">{{ $data->phone_number }}</td>
+                                            <td class="text-center">{{ $data->address }}</td>
                                             
                                             <td class="text-center d-flex align-items-center justify-content-center">
-                                                <a href="#" @click="editData({{ $publisher }})"
+                                                <a href="#" @click="editData({{ $data }})"
                                                     class="btn btn-warning btn-sm mr-1">Edit</a>
 
-                                               <a href="#" @click="deleteData({{ $publisher -> id }})"
+                                               <a href="#" @click="deleteData({{ $data -> id }})"
                                                     class="btn btn-danger btn-sm"> Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table> --}}
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -66,9 +69,9 @@
             <div class="modal fade" id="modal-default">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form method="post" :action="actionUrl" autocomplete="off">
+                        <form method="POST" :action="actionUrl" autocomplete="off">
                             <div class="modal-header">
-                                <h4 class="modal-title">Publisher</h4>
+                                <h4 class="modal-title">Member</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -121,31 +124,22 @@
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 <script type="text/javascript">
-     var actionUrl = '{{url ('publishers')}}';
-    var apiUrl = '{{url ('api/publishers')}}';
-    
-    var columns = [
-        {data: 'DT_RowIndex' ,class: 'text-center' , orderable:true},
-        {data: 'name' ,class: 'text-center' , orderable:true},
-        {data: 'email' ,class: 'text-center' , orderable:true},
-        {data: 'phone_number' ,class: 'text-center' , orderable:true},
-        {data: 'address' ,class: 'text-center' , orderable:true},
-        {render:function (index,row,data,meta){
-            return `
-            <a href="#" class="btn btn-warning btn-sm" onclick="controller.editData(event, ${meta.row})"
-            >Edit</a>
-            <a  class="btn btn-danger btn-sm" onclick="controller.deleteData(event, ${data.id})"
-            >Delete</a>`;
-
-            
-        }, orederable:false, class: 'text-center'},
-        
-    ];
+     $(function () {
+    $("#datatable").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    // $('#datatable').DataTable({
+    //   "paging": true,
+    //   "lengthChange": false,
+    //   "searching": false,
+    //   "ordering": true,
+    //   "info": true,
+    //   "autoWidth": false,
+    //   "responsive": true,
+    // });
+  });
 </script>
-<script src="{{asset('js/data.js')}}">
-    
-</script>
-
 {{-- CRUD --}}
     <script type="text/javascript">
         var controller = Vue.createApp({
@@ -179,9 +173,9 @@
             }
         });
 
-        // Attach the Vue instance to the element with the ID 'controller'
         controller.mount('#controller');
     </script>
+
+
+
 @endsection
-
-
