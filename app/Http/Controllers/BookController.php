@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
+use App\Models\Publisher;
 use App\Models\Book;
+use App\Models\Catalog;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -12,26 +15,18 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with ('author')->get();
+        $publishers = Publisher::all();
+        $books = Book::all();
+        $authors = Author::all();
+        $catalogs = Catalog::all();
         
-        return view('admin.book.index',compact('books'));
+        return view('admin.book.index', compact('publishers', 'books', 'authors', 'catalogs'));
     }
 
     public function api()
     {
         $books = Book::all();
-        // $books = Book::get();
-        
-        // dd($books);
-        return json_encode($books);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json($books); // Menggunakan response()->json() untuk mengembalikan respons JSON
     }
 
     /**
@@ -39,15 +34,21 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        // dd($request);
+        $this->validate($request,[
+            'isbn' => 'required',
+            'title' => 'required',
+            'tahun' => 'required',
+            'publisher_id' => 'required',
+            'author_id' => 'required',
+            'catalog_id' => 'required',
+            'qty' => 'required',
+            'price' => 'required',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Book $book)
-    {
-        //
+        Book::create($request->all());
+
+        return redirect('books')->with('success', 'Book created successfully!');
     }
 
     /**
@@ -55,7 +56,12 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        $publishers = Publisher::all();
+        $authors = Author::all();
+        $catalogs = Catalog::all();
+        return view('admin.book.edit', compact('book'));
+        
+        // return view('admin.book.edit', compact('book', 'publishers', 'authors', 'catalogs'));
     }
 
     /**
@@ -63,7 +69,20 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $this->validate($request,[
+            'isbn' => 'required',
+            'title' => 'required',
+            'tahun' => 'required',
+            'publisher_id' => 'required',
+            'author_id' => 'required',
+            'catalog_id' => 'required',
+            'qty' => 'required',
+            'price' => 'required',
+        ]);
+
+        $book->update($request->all());
+
+        return redirect('books')->with('success', 'Book updated successfully!');
     }
 
     /**
@@ -71,6 +90,9 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return redirect('books')->with('success', 'Book deleted successfully!');
     }
+    
 }

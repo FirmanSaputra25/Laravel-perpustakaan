@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 @extends('layouts.admin')
-@section('header', 'Author')
+@section('header', 'Books')
 
 
 @section('css')
@@ -21,47 +21,64 @@
     </div>
 @endif
         <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        {{-- <a href="{{ url('members/create') }}" @click="addData()" --}}
-                        <a href="javascript:void(0)" @click="addData()" class="btn btn-sm btn-primary pull-left">Create New
-                            Author</a>
+            <div class="col-md-5 offset-md-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
                     </div>
-                        <div class="card-body p-0">
-                            <table id="datatable" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th width= "20spx">No</th>
-                                        <th class="text-center">Name</th>
-                                        <th class="text-center">E-mail</th>
-                                        <th class="text-center">Phone Number</th>
-                                        <th class="text-center">Address</th>
-                                        <th class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    @foreach ($authors as $key => $data)
-                                        <tr>
-                                            <td class="text-center">{{ $key + 1 }}</td>
-                                            <td class="text-center">{{ $data->name }}</td>
-                                            <td class="text-center">{{ $data->email }}</td>
-                                            <td class="text-center">{{ $data->phone_number }}</td>
-                                            <td class="text-center">{{ $data->address }}</td>
-                                            
-                                            <td class="text-center d-flex align-items-center justify-content-center">
-                                                <a href="#" @click="editData({{ $data }})"
-                                                    class="btn btn-warning btn-sm mr-1">Edit</a>
-
-                                               <a href="#" @click="deleteData({{ $data -> id }})"
-                                                    class="btn btn-danger btn-sm"> Delete</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                    <input type="text" class="form-control" autocomplete="off" placeholder="Searching" v-model="search">
+                </div>
+            </div>
+           <div class="card">
+                            {{-- <a href="{{ url('members/create') }}" @click="addData()" --}}
+                            <a href="javascript:void(0)" @click="addData()" class="btn btn-md btn-primary pull-left">Create New
+                                Author</a>
                         </div>
+        
+                       <hr>
+        @foreach($books as $key => $data)
+        <div class="col-md-3 col-sm-6 col-xs-12" >
+            <div class="info-box">
+                <div class="info-box-content">
+                            <span class="info-box-text h3">{{$data->title}} ({{$data->qty}})</span>
+                            <span class="info-box-number">Rp. {{number_format($data->price)}},-</span>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        </div>
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" :action="actionUrl" autocomplete="off">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Books</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @csrf
+                            <input type="text"  name="_method" :value="data.method" hidden>
+                            <div class="form-group">
+                                <label>ISBN</label>
+                                <input type="text" class="form-control" name="isbn" :value="data.isbn" required>
+                            </div>
+                            
+                          
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -79,20 +96,36 @@
                                 @csrf
                                 <input type="text"  name="_method" :value="data.method" hidden>
                                 <div class="form-group">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" name="name" :value="data.name" required>
+                                    <label>ISBN</label>
+                                    <input type="text" class="form-control" name="isbn" :value="data.isbn" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control" name="email" :value="data.email" required>
+                                    <label>Title</label>
+                                    <input type="text" class="form-control" name="title" :value="data.title" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Phone Number</label>
-                                    <input type="text" class="form-control" name="phone_number" :value="data.phone_number" required>
+                                    <label>Year</label>
+                                    <input type="text" class="form-control" name="year" :value="data.year" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Address</label>
-                                    <input type="text" class="form-control" name="address" :value="data.address" required>
+                                    <label>Publisher ID</label>
+                                    <input type="text" class="form-control" name="publisher_id" :value="data.publisher_id" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Author ID</label>
+                                    <input type="text" class="form-control" name="author_id" :value="data.publisher_id" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Catalog ID</label>
+                                    <input type="text" class="form-control" name="catalog_id" :value="data.catalog_id" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Qty</label>
+                                    <input type="text" class="form-control" name="qty" :value="data.qty" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Price</label>
+                                    <input type="text" class="form-control" name="price" :value="data.price" required>
                                 </div>
                               
                             </div>
@@ -145,7 +178,7 @@
             data() {
                 return {
                     data: {},
-                    actionUrl: '{{ url('authors') }}'
+                    actionUrl: '{{ url('books') }}'
                 };
             },
             mounted:function() {
@@ -156,13 +189,13 @@
                     $('#modal-default').modal();
                 },
                 editData(data) {  
-                    this.actionUrl = '{{url('authors')}}'+'/'+data.id;
+                    this.actionUrl = '{{url('books')}}'+'/'+data.id;
                     data.method = 'PUT';
                     this.data = data;
                     $('#modal-default').modal();
                 },
                 deleteData(id) {
-                     this.actionUrl = '{{url('authors')}}'+'/'+id;
+                     this.actionUrl = '{{url('books')}}'+'/'+id;
                    if(confirm("apakah ingin hapus data ?")){
                     axios.post(this.actionUrl,{_method: 'DELETE'}).then(response =>{
                         location.reload();
