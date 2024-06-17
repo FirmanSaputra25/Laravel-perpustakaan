@@ -13,13 +13,24 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $publishers = Publisher::all();
-        $books = Book::all();
         $authors = Author::all();
         $catalogs = Catalog::all();
-        
+
+        // Menambahkan parameter pencarian
+        $query = Book::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "%$search%")
+                  ->orWhere('isbn', 'like', "%$search%")
+                  ->orWhere('year', 'like', "%$search%"); // Ganti 'year' dengan nama kolom yang benar
+        }
+
+        $books = $query->get();
+
         return view('admin.book.index', compact('publishers', 'books', 'authors', 'catalogs'));
     }
 
@@ -34,11 +45,10 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
-        $this->validate($request,[
+        $this->validate($request, [
             'isbn' => 'required',
             'title' => 'required',
-            'tahun' => 'required',
+            'year' => 'required', // Ganti 'year' dengan nama kolom yang benar
             'publisher_id' => 'required',
             'author_id' => 'required',
             'catalog_id' => 'required',
@@ -59,7 +69,7 @@ class BookController extends Controller
         $publishers = Publisher::all();
         $authors = Author::all();
         $catalogs = Catalog::all();
-        return view('admin.book.edit', compact('book'));
+        return view('admin.book.index', compact('book', 'publishers', 'authors', 'catalogs'));
         
         // return view('admin.book.edit', compact('book', 'publishers', 'authors', 'catalogs'));
     }
@@ -69,17 +79,17 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'isbn' => 'required',
             'title' => 'required',
-            'tahun' => 'required',
+            'year' => 'required', // Ganti 'year' dengan nama kolom yang benar
             'publisher_id' => 'required',
             'author_id' => 'required',
             'catalog_id' => 'required',
             'qty' => 'required',
             'price' => 'required',
         ]);
-
+        // dd($request->all());
         $book->update($request->all());
 
         return redirect('books')->with('success', 'Book updated successfully!');
@@ -94,5 +104,4 @@ class BookController extends Controller
 
         return redirect('books')->with('success', 'Book deleted successfully!');
     }
-    
 }

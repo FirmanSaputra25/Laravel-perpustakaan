@@ -22,15 +22,21 @@
             @endif
             <div class="row">
                 <div class="col-md-5 offset-md-3">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <form action="{{ route('books.index') }}" method="GET">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="search" name="search" class="form-control form-control-sm" placeholder="Cari buku..." aria-controls="datatable" value="{{ request()->input('search') }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-sm" type="submit">Cari</button>
+
+                            </div>
                         </div>
-                        <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="datatable">
-                    </div>
+                    </form>
                 </div>
                 <div class="card">
-                    <a href="javascript:void(0)" @click="addData()" class="btn btn-sm btn-primary pull-left">Create New Author</a>
+                    <a href="javascript:void(0)" @click="addData()" class="btn btn-sm btn-primary pull-left">Create New Book</a>
                 </div>
                 @foreach($books as $key => $data)
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -49,14 +55,16 @@
                 <div class="modal-content">
                     <form method="POST" :action="actionUrl" autocomplete="off">
                         <div class="modal-header">
-                            <h4 class="modal-title">Add Books</h4>
+                            <h4 v-if="!editStatus" class="modal-title">Add Book</h4>
+                            <h4 v-if="editStatus" class="modal-title">Edit Book</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             @csrf
-                            <input type="text" name="_method" :value="data.method" hidden>
+                            <input type="hidden" name="_method" value="PUT" v-if="editStatus">
+                            {{-- <input type="text" name="_method" :value="data.method" hidden> --}}
                             <div class="form-group">
                                 <label>ISBN</label>
                                 <input type="text" class="form-control" name="isbn" v-model="data.isbn" required>
@@ -66,8 +74,8 @@
                                 <input type="text" class="form-control" name="title" v-model="data.title" required>
                             </div>
                             <div class="form-group">
-                                <label>Tahun</label>
-                                <input type="text" class="form-control" name="tahun" v-model="data.year" required>
+                                <label>year</label>
+                                <input type="text" class="form-control" name="year" v-model="data.year" required>
                             </div>
                             <div class="form-group">
                                 <label>Publisher</label>
@@ -103,74 +111,9 @@
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="modal-edit">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form  action="" autocomplete="off" method="DELETE">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Add Books</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            @csrf
-                            <input type="text" name="_method" :value="data.method" hidden>
-                            <div class="form-group">
-                                <label>ISBN</label>
-                                <input type="text" class="form-control" name="isbn" v-model="data.isbn" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Title</label>
-                                <input type="text" class="form-control" name="title" v-model="data.title" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Tahun</label>
-                                <input type="text" class="form-control" name="tahun" v-model="data.year" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Publisher</label>
-                                <select name="publisher_id" class="form-control" v-model="data.publisher_id"> 
-                                    @foreach($publishers as $publisher)
-                                        <option value="{{$publisher->id}}"> {{$publisher->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Author</label>
-                                <select name="author_id" class="form-control" v-model="data.author_id"> 
-                                    @foreach($authors as $author)
-                                        <option value="{{$author->id}}"> {{$author->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Catalog</label>
-                                <select name="catalog_id" class="form-control" v-model="data.catalog_id"> 
-                                    @foreach($catalogs as $catalog)
-                                        <option value="{{$catalog->id}}"> {{$catalog->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Qty</label>
-                                <input type="text" class="form-control" name="qty" v-model="data.qty" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Harga Pinjam</label>
-                                <input type="text" class="form-control" name="price" v-model="data.price" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <a href="#" @click="deleteData({{ $data -> id }})"
-                                class="btn btn-danger btn-sm"> Delete</a>
+                            @isset($data)
+                            <a href="#" @click="deleteData({{ $data->id }})" class="btn btn-danger btn-sm">Delete</a>
+                        @endisset
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </form>
@@ -229,7 +172,8 @@
                 },
                 actionUrl: '{{ url('books') }}',
                 search: '',
-                books: {!! json_encode($books) !!}
+                books: {!! json_encode($books) !!},
+                editStatus: false
             };
         },
         mounted:function() {
@@ -238,6 +182,8 @@
         methods: {
             addData() {
                 this.resetData();
+                this.editStatus = false;
+                console.log(this.actionUrl);
                 $('#modal-default').modal();
             },
             editData(data) {
@@ -253,16 +199,20 @@
                 this.data.price = data.price;
 
                 // Mengatur method untuk pengiriman formulir sesuai dengan metode PUT
+                this.actionUrl = '{{ url('books') }}' + '/' + data.id
                 this.data.method = 'PUT';
-                $('#modal-edit').modal();
+                this.editStatus = true;
+                $('#modal-default').modal();
             },
             deleteData(id) {
+                this.actionUrl = '{{ url('books') }}' + '/' + id
                 if(confirm("apakah ingin hapus data ?")){
                     // Menambahkan token CSRF ke dalam header permintaan
                     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                     
                     // Mengirim permintaan DELETE menggunakan Axios
-                    axios.delete('{{url('books')}}/hapus'+id)
+                    // axios.delete('{{url('books')}}/'+id)
+                    axios.post(this.actionUrl, {_method:'DELETE'})
                     .then(response => {
                         location.reload();
                     });
