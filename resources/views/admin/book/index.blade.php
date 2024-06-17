@@ -1,106 +1,127 @@
 <!DOCTYPE html>
 @extends('layouts.admin')
-@section('header', 'Book')
-
+@section('header', 'Books')
 
 @section('css')
-  <link rel="stylesheet" href="{{asset('asset/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
-  <link rel="stylesheet" href="{{asset('asset/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
-  <link rel="stylesheet" href="{{asset('asset/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}"> 
+<link rel="stylesheet" href="{{asset('asset/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('asset/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('asset/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
 @endsection
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <div id="controller">
         <div id="controller">
-        @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif 
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="row">
+                <div class="col-md-5 offset-md-3">
+                    <form action="{{ route('books.index') }}" method="GET">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                            <input type="search" name="search" class="form-control form-control-sm" placeholder="Cari buku..." aria-controls="datatable" value="{{ request()->input('search') }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary btn-sm" type="submit">Cari</button>
 
-    <div class="row">
-        <div class="col-md-5 offset-md-3">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <input type="text" class="form-control" autocomplete="off" placeholder="Searching" v-model="search">
-            </div>
-        </div>
-       <div class="card">
-                        {{-- <a href="{{ url('members/create') }}" @click="addData()" --}}
-                        <a href="javascript:void(0)" @click="addData()" class="btn btn-md btn-primary pull-left">Create New
-                            Author</a>
-                    </div>
-    
-    <hr>
-        @foreach($books as $key => $data)
-        <div class="col-md-3 col-sm-6 col-xs-12" >
-            <div class="info-box">
-                <div class="info-box-content">
-                            <span class="info-box-text h3">{{$data->title}} ({{$data->qty}})</span>
-                            <span class="info-box-number">Rp. {{number_format($data->price)}},-</span>
-                    </div>
+                <div class="card">
+                    <a href="javascript:void(0)" @click="addData()" class="btn btn-sm btn-primary pull-left">Create New Book</a>
                 </div>
+                @foreach($books as $key => $data)
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <div class="info-box" href="#" @click="editData({{ $data }})" data-target="#modal-default">
+                            <div class="info-box-content">
+                                <span class="info-box-text h3">{{$data->title}} ({{$data->qty}})</span>
+                                <span class="info-box-number">Rp. {{number_format($data->price)}},-</span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
         </div>
         <div class="modal fade" id="modal-default">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form method="POST" :action="actionUrl" autocomplete="off">
                         <div class="modal-header">
-                            <h4 class="modal-title">Member</h4>
+                            <h4 v-if="!editStatus" class="modal-title">Add Book</h4>
+                            <h4 v-if="editStatus" class="modal-title">Edit Book</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             @csrf
-                            <input type="text"  name="_method" :value="data.method" hidden>
+                            <input type="hidden" name="_method" value="PUT" v-if="editStatus">
+                            {{-- <input type="text" name="_method" :value="data.method" hidden> --}}
                             <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" class="form-control" name="name" :value="data.name" required>
+                                <label>ISBN</label>
+                                <input type="text" class="form-control" name="isbn" v-model="data.isbn" required>
                             </div>
                             <div class="form-group">
-                                <label>Gender</label>
-                               <p>Laki-Laki <input type="radio" class="form-control" name="gender" value="L" :value="data.gender" required></p>
-                                <p>Perempuan<input type="radio" class="form-control" name="gender" value="P" :value="data.gender" required></p>
+                                <label>Title</label>
+                                <input type="text" class="form-control" name="title" v-model="data.title" required>
                             </div>
                             <div class="form-group">
-                                <label>Phone Number</label>
-                                <input type="text" class="form-control" name="phone_number" :value="data.phone_number" required>
+                                <label>year</label>
+                                <input type="text" class="form-control" name="year" v-model="data.year" required>
                             </div>
                             <div class="form-group">
-                                <label>Address</label>
-                                <input type="text" class="form-control" name="address" :value="data.address" required>
+                                <label>Publisher</label>
+                                <select name="publisher_id" class="form-control" v-model="data.publisher_id"> 
+                                    @foreach($publishers as $publisher)
+                                        <option value="{{$publisher->id}}"> {{$publisher->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>Email</label>
-                                <input type="text" class="form-control" name="email" :value="data.email" required>
+                                <label>Author</label>
+                                <select name="author_id" class="form-control" v-model="data.author_id"> 
+                                    @foreach($authors as $author)
+                                        <option value="{{$author->id}}"> {{$author->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                          
+                            <div class="form-group">
+                                <label>Catalog</label>
+                                <select name="catalog_id" class="form-control" v-model="data.catalog_id"> 
+                                    @foreach($catalogs as $catalog)
+                                        <option value="{{$catalog->id}}"> {{$catalog->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Qty</label>
+                                <input type="text" class="form-control" name="qty" v-model="data.qty" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Harga Pinjam</label>
+                                <input type="text" class="form-control" name="price" v-model="data.price" required>
+                            </div>
                         </div>
                         <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            @isset($data)
+                            <a href="#" @click="deleteData({{ $data->id }})" class="btn btn-danger btn-sm">Delete</a>
+                        @endisset
                             <button type="submit" class="btn btn-primary">Save changes</button>
-                            
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 @endsection
-
-        
-
 @section('js')
 <!-- Data Table & Plugin-->
 <script src="{{ asset('asset/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -116,7 +137,7 @@
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{ asset('asset/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 <script type="text/javascript">
-     $(function () {
+    $(function () {
     $("#datatable").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -133,49 +154,87 @@
   });
 </script>
 {{-- CRUD --}}
-    <script type="text/javascript">
-        var controller = Vue.createApp({
-            data() {
-                return {
-                    data: {},
-                    search : '',
-                    actionUrl: '{{ url('books') }}'
-                };
-            },
-            mounted:function() {
-                this.get.books();
-            },
-            methods: {
-                addData() {  
-                    $('#modal-default').modal();
+<script type="text/javascript">
+    var controller = Vue.createApp({
+        data() {
+            return {
+                data: {
+                    id: 0,
+                    isbn: '',
+                    title: '',
+                    year: '',
+                    publisher_id: '',
+                    author_id: '',
+                    catalog_id: '',
+                    qty: '',
+                    price: '',
+                    method: ''
                 },
-                editData(data) {  
-                    this.actionUrl = '{{url('books')}}'+'/'+data.id;
-                    data.method = 'PUT';
-                    this.data = data;
-                    $('#modal-default').modal();
-                },
-                deleteData(id) {
-                     this.actionUrl = '{{url('books')}}'+'/'+id;
-                   if(confirm("apakah ingin hapus data ?")){
-                    axios.post(this.actionUrl,{_method: 'DELETE'}).then(response =>{
+                actionUrl: '{{ url('books') }}',
+                search: '',
+                books: {!! json_encode($books) !!},
+                editStatus: false
+            };
+        },
+        mounted:function() {
+                
+        },
+        methods: {
+            addData() {
+                this.resetData();
+                this.editStatus = false;
+                console.log(this.actionUrl);
+                $('#modal-default').modal();
+            },
+            editData(data) {
+                // Mengatur nilai properti data sesuai dengan data yang diterima
+                this.data.id = data.id;
+                this.data.isbn = data.isbn;
+                this.data.title = data.title;
+                this.data.year = data.year;
+                this.data.publisher_id = data.publisher_id;
+                this.data.author_id = data.author_id;
+                this.data.catalog_id = data.catalog_id;
+                this.data.qty = data.qty;
+                this.data.price = data.price;
+
+                // Mengatur method untuk pengiriman formulir sesuai dengan metode PUT
+                this.actionUrl = '{{ url('books') }}' + '/' + data.id
+                this.data.method = 'PUT';
+                this.editStatus = true;
+                $('#modal-default').modal();
+            },
+            deleteData(id) {
+                this.actionUrl = '{{ url('books') }}' + '/' + id
+                if(confirm("apakah ingin hapus data ?")){
+                    // Menambahkan token CSRF ke dalam header permintaan
+                    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    
+                    // Mengirim permintaan DELETE menggunakan Axios
+                    // axios.delete('{{url('books')}}/'+id)
+                    axios.post(this.actionUrl, {_method:'DELETE'})
+                    .then(response => {
                         location.reload();
                     });
-                   },
-                   computed:{
-                    filteredList(){
-                        return this.books.filter(book => { 
-                            return book.title.toLowerCase().includes(this.search.toLowerCase)
-                        })
-                    }
-                   }
                 }
-            }
-        });
+            },
+            resetData() {
+                this.data = {
+                    id: 0,
+                    isbn: '',
+                    title: '',
+                    year: '',
+                    publisher_id: '',
+                    author_id: '',
+                    catalog_id: '',
+                    qty: '',
+                    price: '',
+                    method: 'POST'
+                };
+            },
+        },
+    });
 
-        controller.mount('#controller');
-    </script>
-
-
-
+    controller.mount('#controller');
+</script>
 @endsection

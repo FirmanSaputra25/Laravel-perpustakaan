@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class book extends Model
 {
+    protected $fillable = [
+        'isbn',
+        'title',
+        'year',
+        'publisher_id',
+        'author_id',
+        'catalog_id',
+        'qty',
+        'price', // Tambahkan field _token ke dalam fillable
+    ];
     use HasFactory;
     public function author()
 {
