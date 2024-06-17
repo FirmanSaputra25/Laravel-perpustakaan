@@ -47,7 +47,7 @@
                                            <td class="text-center">{{$key+1}}</td>  
                                             <td class="text-center">{{$data->name}}</td>  
                                             <td class="text-center">{{count($data->books) }}</td>  
-                                            <td class="text-center">{{date ('H:i:s - d M Y' , strtotime($data->created_at))}}</td>
+                                            <td class="text-center">{{convert_date($data->created_at)}}</td>
                                             <td class="text-center">{{date ('H:i:s - d M Y' , strtotime($data->updated_at))}}</td>   
                                             <td class="text-center d-flex align-items-center justify-content-center">
                                                 <a href="#" @click="editData({{ $data }})"

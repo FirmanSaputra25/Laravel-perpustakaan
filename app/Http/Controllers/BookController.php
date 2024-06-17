@@ -26,7 +26,7 @@ class BookController extends Controller
             $search = $request->input('search');
             $query->where('title', 'like', "%$search%")
                   ->orWhere('isbn', 'like', "%$search%")
-                  ->orWhere('year', 'like', "%$search%"); // Ganti 'year' dengan nama kolom yang benar
+                  ->orWhere('year', 'like', "%$search%");
         }
 
         $books = $query->get();

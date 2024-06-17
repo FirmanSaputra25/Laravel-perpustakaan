@@ -37,6 +37,7 @@
                                         <th class="text-center">E-mail</th>
                                         <th class="text-center">Phone Number</th>
                                         <th class="text-center">Address</th>
+                                        <th class="text-center">Created At</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -49,6 +50,7 @@
                                             <td class="text-center">{{ $data->email }}</td>
                                             <td class="text-center">{{ $data->phone_number }}</td>
                                             <td class="text-center">{{ $data->address }}</td>
+                                            <td class="text-center">{{ $data->created_at }}</td>
                                             
                                             <td class="text-center d-flex align-items-center justify-content-center">
                                                 <a href="#" @click="editData({{ $data }})"
