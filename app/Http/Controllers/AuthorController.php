@@ -17,7 +17,9 @@ class AuthorController extends Controller
     public function index()
     {
       $authors = Author::all();
-
+      foreach($authors as $author){
+        $author->date = convert_date($author->created_at);
+      }
        return view('admin.author',compact('authors'));
     }
     public function api()
