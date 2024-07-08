@@ -36,14 +36,15 @@ Route::resource('publishers',App\Http\Controllers\PublisherController::class);
 Route::resource('authors',App\Http\Controllers\AuthorController::class);
 Route::resource('books',App\Http\Controllers\BookController::class);
 Route::resource('members',App\Http\Controllers\MemberController::class);
+Route::resource('dashboard',App\Http\Controllers\DashboardController::class);
 // Route::post('/books/hapus/{id}', [App\Http\Controllers\BookController::class, 'hapus']);
 
 Route::get('/api/authors', [App\Http\Controllers\AuthorController::class, 'api']);
 Route::get('/api/publishers', [App\Http\Controllers\PublisherController::class, 'api']);
 Route::get('/api/members', [App\Http\Controllers\MemberController::class, 'api']);
 Route::get('/api/catalogs', [App\Http\Controllers\CatalogController::class, 'api']);
-Route::get('/api/books', [App\Http\Controllers\BookController::class, 'api']);
-
+// Route::get('/api/books', [App\Http\Controllers\BookController::class, 'api']);
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->name('dashboard');
 // Route::get('/publishers', [App\Http\Controllers\PublisherController::class, 'create']);
 // Route::get('/publishers', [App\Http\Controllers\PublisherController::class, 'index']);
 // Route::get('/authors', [App\Http\Controllers\AuthorController::class, 'index']);
