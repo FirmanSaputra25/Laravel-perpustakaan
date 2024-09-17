@@ -11,7 +11,7 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $total_buku = Book::count();
+     $total_buku = Book::count();
         return view('admin.dashboard', compact('total_buku'));
     }
 }   

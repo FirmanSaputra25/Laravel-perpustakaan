@@ -272,15 +272,15 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{url ('transcations')}}" class="nav-link {{request ()->is('transcations')? 'active' : ""}}">
+              <a href="{{ url('transcactions') }}"
+                class="nav-link {{ request()->is('transcactions*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-clipboard"></i>
                 <p>
                   Transcation
-
                 </p>
-
               </a>
             </li>
+
           </ul>
         </nav>
 
