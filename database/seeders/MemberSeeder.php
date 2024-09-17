@@ -31,4 +31,3 @@ class MemberSeeder extends Seeder
 
     }
 }
-

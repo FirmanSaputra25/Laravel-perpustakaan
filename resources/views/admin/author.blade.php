@@ -51,11 +51,9 @@
                                             <td class="text-center">{{ $data->phone_number }}</td>
                                             <td class="text-center">{{ $data->address }}</td>
                                             <td class="text-center">{{ $data->created_at }}</td>
-                                            
                                             <td class="text-center d-flex align-items-center justify-content-center">
                                                 <a href="#" @click="editData({{ $data }})"
                                                     class="btn btn-warning btn-sm mr-1">Edit</a>
-
                                                <a href="#" @click="deleteData({{ $data -> id }})"
                                                     class="btn btn-danger btn-sm"> Delete</a>
                                             </td>

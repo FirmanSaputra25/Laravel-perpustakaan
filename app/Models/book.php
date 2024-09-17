@@ -30,4 +30,7 @@ public function catalog()
 {
     return $this->belongsTo('App\Models\Catalog', 'catalog_id');
 }
+public function transcationDetail(){
+    return $this->hasOne(TranscationDetail::class, 'book_id');
+}
 }

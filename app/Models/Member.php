@@ -12,5 +12,10 @@ class Member extends Model
     public function user()
 {
     return $this->hasOne('App\Models\User', 'member_id');
+    
+}
+public function transcation ()
+{
+    return $this->hasMany(Transcation::class, 'member_id');
 }
 }
