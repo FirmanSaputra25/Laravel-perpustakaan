@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class PublisherController extends Controller
 {
 
-      public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
     }
     /**
@@ -18,26 +19,26 @@ class PublisherController extends Controller
      */
     public function index()
     {
-          $publishers = Publisher::with ('books')->get();
+        $publishers = Publisher::with('books')->get();
         return view('admin.publisher.index', compact('publishers'));
     }
     public function api()
     {
-      $publishers = Publisher::all();
-      $datatables = datatables()->of($publishers)->addIndexColumn();
+        $publishers = Publisher::all();
+        $datatables = datatables()->of($publishers)->addIndexColumn();
 
-      return $datatables->make(true);
+        return $datatables->make(true);
     }
 
 
     /**
      * Show the form for creating a new resource.
      */
-    
+
     public function create()
     {
         // return view ('admin.publisher.create');
-        
+
     }
 
     /**
@@ -45,13 +46,13 @@ class PublisherController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request ,[
-            'name'=>['required'],
-            'email'=>['required' , 'email'],
-            'phone_number' =>['required' ,'int'],
+        $this->validate($request, [
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'phone_number' => ['required'],
             'address' => ['required'],
         ]);
-        Publisher::create(['name'=>$request->name, 'email'=>$request->email, 'phone_number'=>$request->phone_number , 'address'=>$request->address]);
+        Publisher::create(['name' => $request->name, 'email' => $request->email, 'phone_number' => $request->phone_number, 'address' => $request->address]);
         return redirect('publishers');
         // Publisher::create ($request->all());
         // dd($request->all());
@@ -69,8 +70,8 @@ class PublisherController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Publisher $publisher)
-    { 
-        return view('admin.publisher.edit' , compact('publisher'));
+    {
+        return view('admin.publisher.edit', compact('publisher'));
     }
 
     /**
@@ -78,16 +79,15 @@ class PublisherController extends Controller
      */
     public function update(Request $request, Publisher $publisher)
     {
-         $this->validate($request ,[
-            'name'=>['required'],
+        $this->validate($request, [
+            'name' => ['required'],
             'email' => ['required', 'email'],
-            'phone_number' =>['required'],
-            'address' =>['required'],
+            'phone_number' => ['required'],
+            'address' => ['required'],
         ]);
-    
-        $publisher->update ($request->all());
-         return redirect('publishers');
-        
+
+        $publisher->update($request->all());
+        return redirect('publishers');
     }
 
     /**
@@ -95,7 +95,7 @@ class PublisherController extends Controller
      */
     public function destroy(Publisher $publisher)
     {
-        $publisher->delete(); 
+        $publisher->delete();
         return redirect('publishers');
     }
 }

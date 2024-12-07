@@ -18,4 +18,8 @@ public function transcation ()
 {
     return $this->hasMany(Transcation::class, 'member_id');
 }
+public function peminjaman()
+{
+    return $this->hasMany(Peminjaman::class, 'member_id');
+}
 }

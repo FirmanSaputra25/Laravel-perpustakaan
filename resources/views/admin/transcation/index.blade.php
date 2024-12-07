@@ -137,12 +137,11 @@
                                 required>
                         </div>
                         <div class="form-group">
-                            <label>Book</label>
-                            <select class="form-control" name="books" required>
-                                @foreach ($books as $book)
-                                <option value="{{ $book->id }}" {{ old('books', $transcation->book_id) == $book->id ?
-                                    'selected' : '' }}>
-                                    {{ $book->title }}
+                            <label>Member</label>
+                            <select class="form-control" name="member_id" required>
+                                @foreach ($members as $member)
+                                <option value="{{ $member->id }}" {{ old('member_id')==$member->id ? 'selected' : '' }}>
+                                    {{ $member->name }}
                                 </option>
                                 @endforeach
                             </select>

@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class CatalogController extends Controller
 {
 
-      public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
     }
     /**
@@ -18,26 +19,26 @@ class CatalogController extends Controller
      */
     public function index()
     {
-          $catalogs = Catalog::with ('books')->get();
+        $catalogs = Catalog::with('books')->get();
         return view('admin.catalog.index', compact('catalogs'));
     }
     public function api()
     {
-      $catalogs = Catalog::all();
-      $datatables = datatables()->of($catalogs)->addIndexColumn();
+        $catalogs = Catalog::all();
+        $datatables = datatables()->of($catalogs)->addIndexColumn();
 
-      return $datatables->make(true);
+        return $datatables->make(true);
     }
 
 
     /**
      * Show the form for creating a new resource.
      */
-    
+
     public function create()
     {
         // return view ('admin.Catalog.create');
-        
+
     }
 
     /**
@@ -45,11 +46,11 @@ class CatalogController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request ,[
-            'name'=>['required'],
-            'jumlah_book'=>['required'],
+        // dd($request->all());
+        $this->validate($request, [
+            'name' => ['required'],
         ]);
-        Catalog::create(['name'=>$request->name, 'jumlah_book'=>$request->jumlah_book]);
+        Catalog::create(['name' => $request->name]);
         return redirect('catalogs');
         // Catalog::create ($request->all());
         // dd($request->all());
@@ -67,8 +68,8 @@ class CatalogController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Catalog $catalog)
-    { 
-        return view('admin.catalog.edit' , compact('catalog'));
+    {
+        return view('admin.catalog.edit', compact('catalog'));
     }
 
     /**
@@ -76,15 +77,12 @@ class CatalogController extends Controller
      */
     public function update(Request $request, Catalog $catalog)
     {
-         $this->validate($request ,[
-            'name'=>['required'],
-            'jumlah_book' => ['required', 'jumlah_book'],
-          
+        $this->validate($request, [
+            'name' => ['required'],
         ]);
-    
-        $catalog->update ($request->all());
-         return redirect('catalogs');
-        
+
+        $catalog->update($request->all());
+        return redirect('catalogs');
     }
 
     /**
@@ -92,7 +90,7 @@ class CatalogController extends Controller
      */
     public function destroy(Catalog $catalog)
     {
-        $catalog->delete(); 
+        $catalog->delete();
         return redirect('catalogs');
     }
 }

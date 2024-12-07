@@ -15,14 +15,14 @@ class TranscationController extends Controller
     // Show a list of transactions
     public function index()
     {
-        
+
         $transcactions = Transcation::with('member')->get();
         $members = Member::with('transcation.transcationDetail.books')->get();
         // dd($members); // Fetch transactions with associated members
         // $members = Member::all(); // Fetch all members
         $books = Book::all(); // Ambil semua data buku
         // $transcactionsDetail = TranscationDetail::with('member')->get();
-        return view('admin.transcation.index', compact('members','books' ,'transcactions'));
+        return view('admin.transcation.index', compact('members', 'books', 'transcactions'));
     }
 
     // Show the form for creating a new transaction
@@ -74,21 +74,21 @@ class TranscationController extends Controller
             'date_end' => 'required|date|after_or_equal:date_start', // Pastikan tanggal akhir setelah atau sama dengan tanggal mulai
             'book_id' => 'required|exists:books,id',
         ]);
-    
+
         // Lanjutkan dengan penyimpanan data
         $transcation = Transcation::findOrFail($id);
         $transcation->update($request->all());
-    
+
         return redirect()->route('transcations.index')->with('success', 'Transcation updated successfully.');
     }
-    
+
 
     // Remove the specified transaction from storage
     public function destroy(Transcation $transcation)
     {
         try {
             $transcation->delete(); // Delete the transaction
-    
+
             return redirect()->route('transcactions.index')->with('success', 'Data berhasil dihapus.'); // Redirect with success message
         } catch (\Exception $e) {
             // Handle error if deletion fails
