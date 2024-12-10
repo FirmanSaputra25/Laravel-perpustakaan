@@ -10,7 +10,6 @@ class CreatePeminjamanTable extends Migration
     {
         Schema::create('peminjaman', function (Blueprint $table) {
             $table->id(); // Primary key ID
-            $table->unsignedBigInteger('book_id'); // Relasi ke tabel books
             $table->unsignedBigInteger('member_id'); // Relasi ke tabel members
             $table->date('tanggal_pinjam'); // Tanggal pinjam
             $table->date('tanggal_kembali')->nullable(); // Tanggal kembali (nullable)
@@ -18,7 +17,6 @@ class CreatePeminjamanTable extends Migration
             $table->timestamps(); // Timestamps untuk created_at dan updated_at
 
             // Definisikan foreign key
-            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
         });
     }

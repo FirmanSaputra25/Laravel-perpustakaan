@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Peminjaman;
 use App\Models\Book; // Pastikan nama model sesuai dengan file model Anda
 use App\Models\Member; // Pastikan nama model sesuai dengan file model Anda
+use App\Models\PeminjamanBook;
 use Illuminate\Http\Request;
 
 class PeminjamanController extends Controller
 {
     public function index()
     {
+
         $peminjaman = Peminjaman::with('books', 'member')->get();
+        // dd($peminjaman->toArray());
         $peminjaman->each(function ($item) {
+            $item->total_buku = count($item->books);
+            $item->total_bayar = $item->books->sum('price');
             // Menghitung Lama Peminjaman
             $item->lama_peminjaman = $item->tanggal_kembali ?
                 \Carbon\Carbon::parse($item->tanggal_pinjam)->diffInDays($item->tanggal_kembali) :
@@ -21,6 +26,7 @@ class PeminjamanController extends Controller
 
         return view('peminjaman.index', compact('peminjaman'));
     }
+
     public function create()
     {
         // Mendapatkan data yang dibutuhkan untuk form, misalnya buku dan anggota
@@ -43,15 +49,22 @@ class PeminjamanController extends Controller
         $firstPeminjaman = null;
 
         // Simpan data peminjaman untuk setiap buku yang dipilih
-        foreach ($validated['book_id'] as $bookId) {
-            $peminjaman = Peminjaman::create([
-                'book_id' => $bookId,
-                'member_id' => $validated['member_id'],
-                'tanggal_pinjam' => $validated['tanggal_pinjam'],
-                'tanggal_kembali' => $validated['tanggal_kembali'],
-                'status' => $validated['status'],
-            ]);
+        $peminjaman = Peminjaman::create([
+            // 'book_id' => $bookId,
+            'member_id' => $validated['member_id'],
+            'tanggal_pinjam' => $validated['tanggal_pinjam'],
+            'tanggal_kembali' => $validated['tanggal_kembali'],
+            'status' => $validated['status'],
+        ]);
 
+        foreach ($validated['book_id'] as $bookId) {
+
+
+            PeminjamanBook::create([
+                'peminjaman_id' => $peminjaman->id,
+                'book_id' => $bookId,
+                'status' => $validated['status'], // Simpan status peminjaman perbuku sesuai yang diinputkan
+            ]);
             // Simpan peminjaman pertama
             if (!$firstPeminjaman) {
                 $firstPeminjaman = $peminjaman;
@@ -125,7 +138,9 @@ class PeminjamanController extends Controller
 
     public function show($id)
     {
+
         $peminjaman = Peminjaman::with('books', 'member')->findOrFail($id);
+        // dd($peminjaman->toArray());
         return view('peminjaman.show', compact('peminjaman'));
     }
 }

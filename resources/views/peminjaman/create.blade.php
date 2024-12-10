@@ -2,10 +2,7 @@
 
 @section('content')
 <!-- Menggunakan CSS Select2 -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<!-- Menggunakan jQuery dan Select2 JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -101,13 +98,13 @@
 <script>
     $(document).ready(function() {
         // Inisialisasi Select2 untuk elemen dengan class js-example-basic-multiple
-        $('#book_id').select2({
+        $('.js-example-basic-multiple').select2({
             placeholder: "Pilih Buku",
             allowClear: true
         });
 
         // Ketika pilihan buku berubah, tampilkan buku yang dipilih
-        $('#book_id').on('change', function() {
+        $('.js-example-basic-multiple').on('change', function() {
             var selectedBooks = $(this).val(); // Ambil nilai yang dipilih
             var displayText = '';
 

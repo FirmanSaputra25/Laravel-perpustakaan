@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TranscationController;
 use App\Http\Controllers\CatalogController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PeminjamanController;
-
+use App\Models\Peminjaman;
 
 Auth::routes();
 Route::get('/', function () {
@@ -30,6 +31,9 @@ Route::resource('authors', AuthorController::class);
 Route::resource('books', BookController::class);
 Route::resource('members', MemberController::class);
 Route::resource('dashboard', DashboardController::class);
+
+Route::get('peminjaman', 'AdminController@peminjaman');
+Route::get('test_spaite', [AdminController::class, 'test_spaite']);
 
 
 

@@ -7,6 +7,8 @@
   <title>Firman Library</title>
 
   <!-- Google Font: Source Sans Pro -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -167,7 +169,7 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
               <a href="{{ url('transcactions') }}"
                 class="nav-link {{ request()->is('transcactions*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-clipboard"></i>
@@ -175,7 +177,7 @@
                   Transcation
                 </p>
               </a>
-            </li>
+            </li> --}}
           </ul>
         </nav>
 
@@ -214,6 +216,7 @@
     </div>
     <!-- ./wrapper -->
 
+
     <!-- jQuery -->
     <script src="{{asset('asset/plugins/jquery/jquery.min.js')}}"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -233,6 +236,9 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Menggunakan jQuery dan Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @yield('js')
 </body>

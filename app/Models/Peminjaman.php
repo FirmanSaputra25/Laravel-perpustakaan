@@ -12,7 +12,6 @@ class Peminjaman extends Model
     protected $table = 'peminjaman'; // Tentukan nama tabel jika berbeda dari nama model yang dikehendaki
 
     protected $fillable = [
-        'book_id',
         'member_id',
         'tanggal_pinjam',
         'tanggal_kembali',
@@ -25,7 +24,6 @@ class Peminjaman extends Model
     {
         return $this->belongsToMany(Book::class, 'peminjaman_books')->withPivot('status');
     }
-
 
     public function member()
     {
